@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BDO Horse Compendium</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* ── Reset & Base ─────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Cormorant Garamond", "Georgia", serif;
+      background: #0a0908;
+      color: #c8bba8;
+      min-height: 100vh;
+      background-image:
+        radial-gradient(ellipse at 50% 0%, rgba(80, 60, 30, .2) 0%, transparent 50%),
+        radial-gradient(ellipse at 20% 80%, rgba(50, 35, 15, .15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 90%, rgba(40, 28, 12, .15) 0%, transparent 50%);
+    }
+
+    /* ── Ornamental Divider ───────────────────────────── */
+    .ornament {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .75rem;
+      padding: .5rem 0;
+      color: rgba(200, 173, 127, .3);
+      font-size: .85rem;
+      user-select: none;
+    }
+
+    .ornament::before,
+    .ornament::after {
+      content: "";
+      flex: 1;
+      max-width: 120px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(200, 173, 127, .25), transparent);
+    }
+
+    /* ── Header ───────────────────────────────────────── */
+    header {
+      text-align: center;
+      padding: 2.5rem 1rem 2rem;
+      position: relative;
+      background: linear-gradient(180deg, rgba(20, 16, 10, .95) 0%, rgba(10, 9, 8, 0) 100%);
+    }
+
+    header::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(500px, 80%);
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(200, 173, 127, .3), transparent);
+    }
+
+    header h1 {
+      font-family: "Cinzel", "Georgia", serif;
+      font-size: 2.4rem;
+      font-weight: 400;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: #c8ad7f;
+      text-shadow:
+        0 0 30px rgba(200, 173, 127, .15),
+        0 1px 0 rgba(0, 0, 0, .5);
+    }
+
+    header .subtitle {
+      margin-top: .6rem;
+      font-size: 1rem;
+      font-style: italic;
+      color: #6d6353;
+      letter-spacing: .08em;
+    }
+
+    /* ── Tier Tabs ─────────────────────────────────────── */
+    .tier-nav {
+      display: flex;
+      justify-content: center;
+      gap: .35rem;
+      padding: 1.5rem 1rem 1rem;
+      flex-wrap: wrap;
+    }
+
+    .tier-tab {
+      font-family: "Cinzel", "Georgia", serif;
+      background: linear-gradient(180deg, rgba(40, 33, 22, .6) 0%, rgba(25, 20, 14, .6) 100%);
+      border: 1px solid rgba(200, 173, 127, .12);
+      color: #7a6f5e;
+      padding: .6rem 2rem;
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all .25s ease;
+      position: relative;
+    }
+
+    .tier-tab::before {
+      content: "";
+      position: absolute;
+      inset: 3px;
+      border: 1px solid rgba(200, 173, 127, .05);
+      pointer-events: none;
+      transition: border-color .25s ease;
+    }
+
+    .tier-tab:hover {
+      background: linear-gradient(180deg, rgba(60, 48, 28, .7) 0%, rgba(35, 28, 18, .7) 100%);
+      color: #c8ad7f;
+      border-color: rgba(200, 173, 127, .25);
+    }
+
+    .tier-tab:hover::before {
+      border-color: rgba(200, 173, 127, .1);
+    }
+
+    .tier-tab.active {
+      background: linear-gradient(180deg, rgba(80, 62, 32, .5) 0%, rgba(45, 35, 20, .5) 100%);
+      color: #c8ad7f;
+      border-color: rgba(200, 173, 127, .35);
+      box-shadow:
+        0 0 15px rgba(200, 173, 127, .06),
+        inset 0 1px 0 rgba(200, 173, 127, .08);
+    }
+
+    .tier-tab.active::before {
+      border-color: rgba(200, 173, 127, .12);
+    }
+
+    /* ── Content Area ──────────────────────────────────── */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem 4rem;
+    }
+
+    .tier-panel {
+      display: none;
+    }
+
+    .tier-panel.active {
+      display: block;
+    }
+
+    .tier-heading {
+      font-family: "Cinzel", "Georgia", serif;
+      font-size: .85rem;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: #6d6353;
+      text-align: center;
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .tier-heading::after {
+      content: "\2726  \2726  \2726";
+      display: block;
+      margin-top: .6rem;
+      font-size: .55rem;
+      letter-spacing: .6em;
+      color: rgba(200, 173, 127, .2);
+    }
+
+    /* ── Rarity Sections ──────────────────────────────── */
+    .rarity-section {
+      margin-bottom: 2.5rem;
+    }
+
+    .rarity-label {
+      font-family: "Cinzel", "Georgia", serif;
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      padding: .3rem .85rem;
+      margin-bottom: 1rem;
+      border-left: 2px solid;
+    }
+
+    .rarity-normal { color: #8a7f6e; border-color: #6d6353; background: rgba(109, 99, 83, .06); }
+    .rarity-rare   { color: #e8a628; border-color: #e8a628; background: rgba(232, 166, 40, .06); }
+
+    /* ── Horse Grid ────────────────────────────────────── */
+    .horse-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+
+    .horse-card {
+      background: linear-gradient(160deg, rgba(35, 28, 18, .5) 0%, rgba(20, 16, 10, .5) 100%);
+      border: 1px solid rgba(200, 173, 127, .1);
+      padding: 1.2rem 1.3rem;
+      transition: all .25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Double-border effect */
+    .horse-card::after {
+      content: "";
+      position: absolute;
+      inset: 3px;
+      border: 1px solid rgba(200, 173, 127, .04);
+      pointer-events: none;
+      transition: border-color .25s ease;
+    }
+
+    .horse-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+    }
+
+    .horse-card.rarity-normal::before { background: linear-gradient(90deg, rgba(154, 141, 122, .3), transparent 70%); }
+    .horse-card.rarity-rare::before   { background: linear-gradient(90deg, rgba(232, 166, 40, .6), transparent 70%); }
+
+    .horse-card:hover {
+      background: linear-gradient(160deg, rgba(45, 36, 22, .6) 0%, rgba(25, 20, 14, .6) 100%);
+      border-color: rgba(200, 173, 127, .2);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, .35);
+    }
+
+    .horse-card:hover::after {
+      border-color: rgba(200, 173, 127, .08);
+    }
+
+    .horse-img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: contain;
+      display: block;
+      margin-bottom: .75rem;
+      border: 1px solid rgba(200, 173, 127, .08);
+      background: rgba(0, 0, 0, .2);
+    }
+
+    .horse-name {
+      font-family: "Cinzel", "Georgia", serif;
+      font-size: .95rem;
+      font-weight: 500;
+      letter-spacing: .04em;
+      margin-bottom: .35rem;
+    }
+
+    .horse-card.rarity-normal .horse-name { color: #c8bba8; }
+    .horse-card.rarity-rare .horse-name   { color: #e8a628; }
+
+    .horse-card.rarity-rare {
+      border-color: rgba(232, 166, 40, .15);
+      background: linear-gradient(160deg, rgba(60, 42, 12, .3) 0%, rgba(25, 18, 8, .4) 100%);
+    }
+
+    .horse-card.rarity-rare::after {
+      border-color: rgba(232, 166, 40, .06);
+    }
+
+    .horse-card.rarity-rare:hover {
+      border-color: rgba(232, 166, 40, .3);
+      box-shadow:
+        0 6px 20px rgba(0, 0, 0, .35),
+        0 0 20px rgba(232, 166, 40, .04);
+    }
+
+    .rare-badge {
+      font-family: "Cinzel", "Georgia", serif;
+      display: inline-block;
+      font-size: .5rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: #e8a628;
+      background: rgba(232, 166, 40, .08);
+      border: 1px solid rgba(232, 166, 40, .2);
+      padding: .1rem .5rem;
+      margin-left: .5rem;
+      vertical-align: middle;
+    }
+
+    .horse-benefits {
+      margin-top: .55rem;
+      padding-top: .55rem;
+      border-top: 1px solid rgba(232, 166, 40, .08);
+    }
+
+    .horse-benefits li {
+      font-size: .9rem;
+      color: #a89878;
+      line-height: 1.7;
+      list-style: none;
+      padding-left: .9rem;
+      position: relative;
+    }
+
+    .horse-benefits li::before {
+      content: "\25C6";
+      position: absolute;
+      left: 0;
+      color: rgba(232, 166, 40, .5);
+      font-size: .45rem;
+      top: .25rem;
+    }
+
+    .horse-meta {
+      font-size: .9rem;
+      font-style: italic;
+      color: #6d6353;
+      line-height: 1.5;
+    }
+
+    /* ── Empty State ───────────────────────────────────── */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 1rem;
+      color: #3d3729;
+    }
+
+    .empty-state .empty-icon {
+      display: block;
+      font-size: 1.8rem;
+      margin-bottom: .75rem;
+      opacity: .3;
+    }
+
+    .empty-state .empty-text {
+      font-family: "Cinzel", "Georgia", serif;
+      font-size: .8rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    /* ── Responsive ────────────────────────────────────── */
+    @media (max-width: 768px) {
+      header { padding: 2rem 1rem 1.5rem; }
+      header h1 { font-size: 1.6rem; letter-spacing: .1em; }
+      header .subtitle { font-size: .9rem; }
+
+      .tier-nav { gap: .3rem; padding: 1rem .75rem; }
+      .tier-tab { padding: .55rem 1.4rem; font-size: .7rem; }
+
+      main { padding: .75rem .75rem 3rem; }
+
+      .tier-heading { font-size: .8rem; margin-bottom: 1.25rem; }
+
+      .rarity-label { font-size: .7rem; margin-bottom: .75rem; }
+
+      .horse-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: .75rem;
+      }
+
+      .horse-card { padding: 1rem; }
+      .horse-name { font-size: .9rem; }
+      .horse-benefits li { font-size: .85rem; }
+      .horse-meta { font-size: .85rem; }
+      .rare-badge { font-size: .5rem; padding: .1rem .4rem; }
+    }
+
+    @media (max-width: 480px) {
+      header h1 { font-size: 1.3rem; }
+
+      .tier-nav { gap: .25rem; padding: .75rem .5rem; }
+      .tier-tab { padding: .5rem 1rem; font-size: .65rem; flex: 1; text-align: center; }
+
+      main { padding: .5rem .5rem 2.5rem; }
+
+      .horse-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: .6rem;
+      }
+
+      .horse-card { padding: .85rem; }
+      .horse-name { font-size: .82rem; }
+      .horse-benefits li { font-size: .8rem; line-height: 1.6; }
+      .rare-badge { margin-left: .3rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Horse Compendium</h1>
+    <div class="ornament">&loz;</div>
+    <p class="subtitle">Black Desert Online &mdash; Tamable Horses</p>
+  </header>
+
+  <nav class="tier-nav" id="tierNav">
+    <!-- Tabs are generated from data -->
+  </nav>
+
+  <main id="content">
+    <!-- Panels are generated from data -->
+  </main>
+
+  <script>
+    /*
+     * ═══════════════════════════════════════════════════
+     *  HORSE DATA — edit this object to update the app
+     * ═══════════════════════════════════════════════════
+     *
+     *  Structure:
+     *    HORSES[tierKey] = {
+     *      label: "Display Name",
+     *      horses: [
+     *        { name: "Horse Name" },
+     *        { name: "Rare Horse", rare: true, benefits: ["Benefit 1", "Benefit 2"] },
+     *      ]
+     *    }
+     */
+    const HORSES = {
+      tier6: {
+        label: "Tier 6",
+        horses: [
+          { name: "6B", image: "https://bdocodex.com/items/new_ui_common_forlua/window/stable/horse_15.webp" },
+          { name: "6C", image: "https://bdocodex.com/items/new_ui_common_forlua/window/stable/horse_19.webp" },
+          { name: "6K", image: "https://bdocodex.com/items/new_ui_common_forlua/window/stable/horse_53.webp" },
+          { name: "Rare 6 (10x Value)", rare: true, image: "https://s1.pearlcdn.com/KR/Upload/News/db37ab778bf20251219151835880.png", benefits: ["Selling/Imperial Delivery price increased by approx. 10x", "Growth speed is 2.5x slower"] },
+          { name: "Rare 6 (7.5x Value)", rare: true, image: "https://s1.pearlcdn.com/KR/Upload/News/cafe8577f7420251219151842675.png", benefits: ["Selling/Imperial Delivery price increased by approx. 7.5x", "Growth speed is 2.5x slower"] },
+        ]
+      },
+      tier7: {
+        label: "Tier 7",
+        horses: [
+          { name: "7J", image: "https://bdocodex.com/items/new_ui_common_forlua/window/stable/horse_77.webp" },
+          { name: "Rare 7 (10x Value)", rare: true, image: "https://s1.pearlcdn.com/KR/Upload/News/426b7cf446d20251219151900927.png", benefits: ["Selling/Imperial Delivery price increased by approx. 10x", "Growth speed is 2.5x slower"] },
+          { name: "Rare 7 (7.5x Value)", rare: true, image: "https://s1.pearlcdn.com/KR/Upload/News/3f72aac0e2820251219151903886.png", benefits: ["Selling/Imperial Delivery price increased by approx. 7.5x", "Growth speed is 2.5x slower"] },
+          { name: "Rare 7 (10x + Breeding)", rare: true, image: "https://s1.pearlcdn.com/KR/Upload/News/92af4ad9cc820251219151848251.png", benefits: ["Selling/Imperial Delivery price increased by approx. 10x", "Breeding Count: 3", "Growth speed is 2.5x slower"] },
+          { name: "Rare 7 (7.5x + Breeding)", rare: true, image: "https://s1.pearlcdn.com/KR/Upload/News/ca1f737fab120251219151852480.png", benefits: ["Selling/Imperial Delivery price increased by approx. 7.5x", "Breeding Count: 3", "Growth speed is 2.5x slower"] },
+          { name: "Rare 7 (5x + Breeding)", rare: true, image: "https://s1.pearlcdn.com/KR/Upload/News/0d487ea14df20251219151856270.png", benefits: ["Selling/Imperial Delivery price increased by approx. 5x", "Breeding Count: 3"] },
+        ]
+      },
+      tier8: {
+        label: "Tier 8",
+        horses: [
+          { name: "8D", image: "https://bdocodex.com/items/new_ui_common_forlua/window/stable/horse_76.webp" },
+          { name: "Rare 8 (10x Value)", rare: true, image: "https://s1.pearlcdn.com/KR/Upload/News/bc3a160f9f920251219151959043.png", benefits: ["Selling/Imperial Delivery price increased by approx. 10x", "Growth speed is 2.5x slower"] },
+          { name: "Rare 8 (7.5x Value)", rare: true, image: "https://s1.pearlcdn.com/KR/Upload/News/9c4172be83920251219152004596.png", benefits: ["Selling/Imperial Delivery price increased by approx. 7.5x", "Growth speed is 2.5x slower"] },
+          { name: "Rare 8 (10x + Breeding)", rare: true, image: "https://s1.pearlcdn.com/KR/Upload/News/c3c7f92a88f20251219151948707.png", benefits: ["Selling/Imperial Delivery price increased by approx. 10x", "Breeding Count: 3", "Growth speed is 2.5x slower"] },
+          { name: "Rare 8 (7.5x + Breeding)", rare: true, image: "https://s1.pearlcdn.com/KR/Upload/News/bfdef87fe9d20251219151952497.png", benefits: ["Selling/Imperial Delivery price increased by approx. 7.5x", "Breeding Count: 3", "Growth speed is 2.5x slower"] },
+          { name: "Rare 8 (5x + Breeding)", rare: true, image: "https://s1.pearlcdn.com/KR/Upload/News/bd701371f2820251219151955877.png", benefits: ["Selling/Imperial Delivery price increased by approx. 5x", "Breeding Count: 3"] },
+          { name: "Rare 8 (S: Instant Accel)", rare: true, image: "https://s1.pearlcdn.com/KR/Upload/News/19301ec054320251219151910415.png", benefits: ["S: Instant Accel skill"] },
+          { name: "Rare 8 (S: Sideways)", rare: true, image: "https://s1.pearlcdn.com/KR/Upload/News/24ddfa9549920251219151913668.png", benefits: ["S: Sideways skill"] },
+          { name: "Rare 8 (S: Instant Accel + Growth)", rare: true, image: "https://s1.pearlcdn.com/KR/Upload/News/25a01c4a98120251219151918187.png", benefits: ["S: Instant Accel skill", "Growth speed doubled"] },
+          { name: "Rare 8 (S: Sideways + Growth)", rare: true, image: "https://s1.pearlcdn.com/KR/Upload/News/cefb11cdd3120251219151923637.png", benefits: ["S: Sideways skill", "Growth speed doubled"] },
+        ]
+      },
+    };
+
+    /* ── Render ──────────────────────────────────────── */
+    const nav = document.getElementById("tierNav");
+    const content = document.getElementById("content");
+    const tierKeys = Object.keys(HORSES);
+
+    tierKeys.forEach((key, i) => {
+      const tier = HORSES[key];
+
+      // Tab
+      const btn = document.createElement("button");
+      btn.className = "tier-tab" + (i === 0 ? " active" : "");
+      btn.textContent = tier.label;
+      btn.dataset.tier = key;
+      btn.addEventListener("click", () => switchTier(key));
+      nav.appendChild(btn);
+
+      // Panel
+      const panel = document.createElement("section");
+      panel.className = "tier-panel" + (i === 0 ? " active" : "");
+      panel.id = "panel-" + key;
+
+      const heading = document.createElement("h2");
+      heading.className = "tier-heading";
+      heading.textContent = tier.label + " Horses";
+      panel.appendChild(heading);
+
+      if (tier.horses.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "empty-state";
+        empty.innerHTML = '<span class="empty-icon">&#9876;</span><span class="empty-text">No horses added to ' + tier.label + ' yet</span>';
+        panel.appendChild(empty);
+      } else {
+        const normal = tier.horses.filter(h => !h.rare);
+        const rare = tier.horses.filter(h => h.rare);
+
+        [
+          { list: normal, rarity: "normal", label: "Normal" },
+          { list: rare, rarity: "rare", label: "Rare" },
+        ].forEach(({ list, rarity, label }) => {
+          if (list.length === 0) return;
+
+          const section = document.createElement("div");
+          section.className = "rarity-section";
+
+          const rlabel = document.createElement("div");
+          rlabel.className = "rarity-label rarity-" + rarity;
+          rlabel.textContent = label;
+          section.appendChild(rlabel);
+
+          const grid = document.createElement("div");
+          grid.className = "horse-grid";
+
+          list.forEach(h => {
+            const card = document.createElement("div");
+            card.className = "horse-card rarity-" + rarity;
+
+            const img = document.createElement("img");
+            img.className = "horse-img";
+            img.src = h.image || "https://placehold.co/400x300/1a1510/3d3729?text=No+Image";
+            img.alt = h.name;
+            img.loading = "lazy";
+            card.appendChild(img);
+
+            const nameRow = document.createElement("div");
+            nameRow.className = "horse-name";
+            nameRow.textContent = h.name;
+            if (h.rare) {
+              const badge = document.createElement("span");
+              badge.className = "rare-badge";
+              badge.textContent = "Rare";
+              nameRow.appendChild(badge);
+            }
+            card.appendChild(nameRow);
+
+            if (h.note) {
+              const meta = document.createElement("div");
+              meta.className = "horse-meta";
+              meta.textContent = h.note;
+              card.appendChild(meta);
+            }
+
+            if (h.benefits && h.benefits.length > 0) {
+              const ul = document.createElement("ul");
+              ul.className = "horse-benefits";
+              h.benefits.forEach(b => {
+                const li = document.createElement("li");
+                li.textContent = b;
+                ul.appendChild(li);
+              });
+              card.appendChild(ul);
+            }
+
+            grid.appendChild(card);
+          });
+
+          section.appendChild(grid);
+          panel.appendChild(section);
+        });
+      }
+
+      content.appendChild(panel);
+    });
+
+    function switchTier(key) {
+      document.querySelectorAll(".tier-tab").forEach(t => t.classList.toggle("active", t.dataset.tier === key));
+      document.querySelectorAll(".tier-panel").forEach(p => p.classList.toggle("active", p.id === "panel-" + key));
+    }
+  </script>
+
+</body>
+</html>
