@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#c8ad7f"/>
+      <stop offset="100%" stop-color="#8a6f3e"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="8" fill="#0a0908"/>
+  <g fill="none" stroke="url(#g)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Horse head and neck -->
+    <path d="M18 46 C18 34, 20 28, 28 22 C30 20, 32 16, 30 12 L34 14 C36 12, 38 10, 40 10 L38 16 C36 18, 34 22, 34 26"/>
+    <!-- Ear -->
+    <path d="M34 14 C35 11, 37 10, 40 10"/>
+    <!-- Mane -->
+    <path d="M30 18 C32 20, 33 22, 33 26 C33 28, 32 30, 30 32"/>
+    <!-- Body -->
+    <path d="M28 22 C24 24, 20 28, 18 34"/>
+    <!-- Eye -->
+    <circle cx="33" cy="19" r="1.5" fill="url(#g)" stroke="none"/>
+    <!-- Nostril -->
+    <circle cx="22" cy="42" r="1" fill="url(#g)" stroke="none"/>
+    <!-- Jaw line -->
+    <path d="M28 22 C26 26, 22 36, 20 44"/>
+    <!-- Body back -->
+    <path d="M34 26 C38 28, 44 30, 48 32 C52 34, 54 38, 52 44"/>
+    <!-- Belly -->
+    <path d="M26 38 C30 42, 38 44, 46 44"/>
+    <!-- Front legs -->
+    <path d="M28 38 L26 52 L28 52"/>
+    <path d="M32 40 L30 52 L32 52"/>
+    <!-- Back legs -->
+    <path d="M46 44 L44 52 L46 52"/>
+    <path d="M50 42 L48 52 L50 52"/>
+    <!-- Tail -->
+    <path d="M52 44 C54 40, 56 38, 54 34 C52 36, 50 38, 52 44"/>
+  </g>
+</svg>
