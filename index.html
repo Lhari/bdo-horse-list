@@ -198,6 +198,7 @@
     .horse-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      grid-auto-rows: auto;
       gap: 1rem;
     }
 
@@ -207,7 +208,8 @@
       padding: 1.2rem 1.3rem;
       transition: all .25s ease;
       position: relative;
-      overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
     /* Double-border effect */
@@ -243,7 +245,8 @@
       border-color: rgba(200, 173, 127, .08);
     }
 
-    .horse-img {
+    /* ── Single Image ─────────────────────────────────── */
+    .horse-card > .horse-img {
       width: 100%;
       aspect-ratio: 4 / 3;
       object-fit: contain;
@@ -251,6 +254,95 @@
       margin-bottom: .75rem;
       border: 1px solid rgba(200, 173, 127, .08);
       background: rgba(0, 0, 0, .2);
+      opacity: 0;
+      transition: opacity .4s ease;
+    }
+
+    .horse-card > .horse-img.loaded {
+      opacity: 1;
+    }
+
+    /* ── Image Slider ─────────────────────────────────── */
+    .horse-slider {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      margin-bottom: .75rem;
+      background: rgba(0, 0, 0, .2);
+      border: 1px solid rgba(200, 173, 127, .08);
+      overflow: hidden;
+    }
+
+    .horse-slider .horse-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: none;
+      opacity: 0;
+      transition: opacity .4s ease;
+    }
+
+    .horse-slider .horse-img.active {
+      display: block;
+    }
+
+    .horse-slider .horse-img.loaded {
+      opacity: 1;
+    }
+
+    .slider-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, .5);
+      border: 1px solid rgba(200, 173, 127, .15);
+      color: #c8ad7f;
+      font-size: .7rem;
+      width: 1.5rem;
+      height: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 2;
+      transition: background .2s ease;
+      font-family: inherit;
+      padding: 0;
+    }
+
+    .slider-arrow:hover {
+      background: rgba(0, 0, 0, .7);
+    }
+
+    .slider-prev { left: .35rem; }
+    .slider-next { right: .35rem; }
+
+    .slider-dots {
+      position: absolute;
+      bottom: .4rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: .3rem;
+      z-index: 2;
+    }
+
+    .slider-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(200, 173, 127, .25);
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: background .2s ease;
+    }
+
+    .slider-dot.active {
+      background: rgba(200, 173, 127, .7);
     }
 
     .horse-name {
@@ -544,12 +636,64 @@
             const card = document.createElement("div");
             card.className = "horse-card rarity-" + rarity;
 
-            const img = document.createElement("img");
-            img.className = "horse-img";
-            img.src = h.image || "https://placehold.co/400x300/1a1510/3d3729?text=No+Image";
-            img.alt = h.name;
-            img.loading = "lazy";
-            card.appendChild(img);
+            const srcs = h.images || (h.image ? [h.image] : []);
+            if (srcs.length <= 1) {
+              const img = document.createElement("img");
+              img.className = "horse-img";
+              img.src = srcs[0] || "https://placehold.co/400x300/1a1510/3d3729?text=No+Image";
+              img.alt = h.name;
+              img.loading = "lazy";
+              img.onload = () => img.classList.add("loaded");
+              card.appendChild(img);
+            } else {
+              const slider = document.createElement("div");
+              slider.className = "horse-slider";
+              let current = 0;
+
+              const imgs = srcs.map((src, idx) => {
+                const img = document.createElement("img");
+                img.className = "horse-img" + (idx === 0 ? " active" : "");
+                img.src = src;
+                img.alt = h.name + " (" + (idx + 1) + ")";
+                img.loading = idx === 0 ? "eager" : "lazy";
+                img.onload = () => img.classList.add("loaded");
+                slider.appendChild(img);
+                return img;
+              });
+
+              const dots = document.createElement("div");
+              dots.className = "slider-dots";
+              const dotEls = srcs.map((_, idx) => {
+                const dot = document.createElement("button");
+                dot.className = "slider-dot" + (idx === 0 ? " active" : "");
+                dot.addEventListener("click", () => goTo(idx));
+                dots.appendChild(dot);
+                return dot;
+              });
+              slider.appendChild(dots);
+
+              const prev = document.createElement("button");
+              prev.className = "slider-arrow slider-prev";
+              prev.textContent = "\u2039";
+              prev.addEventListener("click", () => goTo((current - 1 + srcs.length) % srcs.length));
+              slider.appendChild(prev);
+
+              const next = document.createElement("button");
+              next.className = "slider-arrow slider-next";
+              next.textContent = "\u203A";
+              next.addEventListener("click", () => goTo((current + 1) % srcs.length));
+              slider.appendChild(next);
+
+              function goTo(idx) {
+                imgs[current].classList.remove("active");
+                dotEls[current].classList.remove("active");
+                current = idx;
+                imgs[current].classList.add("active");
+                dotEls[current].classList.add("active");
+              }
+
+              card.appendChild(slider);
+            }
 
             const nameRow = document.createElement("div");
             nameRow.className = "horse-name";
