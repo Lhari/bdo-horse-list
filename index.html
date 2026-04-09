@@ -280,19 +280,29 @@
         0 0 20px rgba(232, 166, 40, .04);
     }
 
-    .rare-badge {
+    .rare-badge,
+    .location-badge {
       font-family: "Cinzel", "Georgia", serif;
       display: inline-block;
       font-size: .5rem;
       font-weight: 700;
       letter-spacing: .14em;
       text-transform: uppercase;
-      color: #e8a628;
-      background: rgba(232, 166, 40, .08);
-      border: 1px solid rgba(232, 166, 40, .2);
       padding: .1rem .5rem;
       margin-left: .5rem;
       vertical-align: middle;
+    }
+
+    .rare-badge {
+      color: #e8a628;
+      background: rgba(232, 166, 40, .08);
+      border: 1px solid rgba(232, 166, 40, .2);
+    }
+
+    .location-badge {
+      color: #6bb58a;
+      background: rgba(107, 181, 138, .08);
+      border: 1px solid rgba(107, 181, 138, .2);
     }
 
     .horse-benefits {
@@ -429,9 +439,21 @@
       tier6: {
         label: "Tier 6",
         horses: [
-          { name: "6B", image: "https://bdocodex.com/items/new_ui_common_forlua/window/stable/horse_15.webp" },
-          { name: "6C", image: "https://bdocodex.com/items/new_ui_common_forlua/window/stable/horse_19.webp" },
-          { name: "6K", image: "https://bdocodex.com/items/new_ui_common_forlua/window/stable/horse_53.webp" },
+          /* ── Normal wild horses ─────────────────── */
+          { name: "Tier 6 Coat 1", image: "https://assets.altarofgaming.com/wp-content/uploads/2019/03/tier-6-horse-8-bdo-1.png" },
+          { name: "Tier 6 Coat 2", image: "https://assets.altarofgaming.com/wp-content/uploads/2019/03/tier-6-horse-19-bdo-1.png" },
+          { name: "Tier 6 Coat 3", image: "https://assets.altarofgaming.com/wp-content/uploads/2019/03/tier-6-horse-21-bdo.png" },
+          { name: "Tier 6 Coat 4", image: "https://assets.altarofgaming.com/wp-content/uploads/2019/03/tier-6-horse-20-bdo.png" },
+          { name: "Tier 6 Coat 5", image: "https://assets.altarofgaming.com/wp-content/uploads/2019/03/tier-6-horse-17-bdo.png" },
+          { name: "Tier 6 Coat 6", image: "https://assets.altarofgaming.com/wp-content/uploads/2019/03/tier-6-horse-16-bdo.png" },
+          { name: "Tier 6 Coat 7", image: "https://assets.altarofgaming.com/wp-content/uploads/2019/03/tier-6-horse-11-bdo.png" },
+          /* ── Drieghan exclusive ──────────────────── */
+          { name: "Tier 6 Coat 8", image: "https://assets.altarofgaming.com/wp-content/uploads/2019/03/tier-6-horse-14-bdo.png", location: "Drieghan" },
+          { name: "Tier 6 Coat 9", image: "https://assets.altarofgaming.com/wp-content/uploads/2019/03/tier-6-horse-15-bdo.png", location: "Drieghan" },
+          { name: "Tier 6 Coat 10", image: "https://assets.altarofgaming.com/wp-content/uploads/2019/03/tier-6-horse-10-bdo.png", location: "Drieghan" },
+          { name: "Tier 6 Coat 11", image: "https://assets.altarofgaming.com/wp-content/uploads/2019/03/tier-6-horse-5-bdo.png", location: "Drieghan" },
+          { name: "Tier 6 Coat 12", image: "https://assets.altarofgaming.com/wp-content/uploads/2019/03/tier-6-horse-12-bdo.png", location: "Drieghan" },
+          /* ── Rare ───────────────────────────────── */
           { name: "Rare 6 (10x Value)", rare: true, image: "https://s1.pearlcdn.com/KR/Upload/News/db37ab778bf20251219151835880.png", benefits: ["Selling/Imperial Delivery price increased by approx. 10x", "Growth speed is 2.5x slower"] },
           { name: "Rare 6 (7.5x Value)", rare: true, image: "https://s1.pearlcdn.com/KR/Upload/News/cafe8577f7420251219151842675.png", benefits: ["Selling/Imperial Delivery price increased by approx. 7.5x", "Growth speed is 2.5x slower"] },
         ]
@@ -439,7 +461,9 @@
       tier7: {
         label: "Tier 7",
         horses: [
-          { name: "7J", image: "https://bdocodex.com/items/new_ui_common_forlua/window/stable/horse_77.webp" },
+          /* ── Drieghan exclusive ──────────────────── */
+          { name: "Tier 7 Coat 1", image: "https://assets.altarofgaming.com/wp-content/uploads/2019/03/tier-7-horse-4-bdo.png" },
+          /* ── Rare ───────────────────────────────── */
           { name: "Rare 7 (10x Value)", rare: true, image: "https://s1.pearlcdn.com/KR/Upload/News/426b7cf446d20251219151900927.png", benefits: ["Selling/Imperial Delivery price increased by approx. 10x", "Growth speed is 2.5x slower"] },
           { name: "Rare 7 (7.5x Value)", rare: true, image: "https://s1.pearlcdn.com/KR/Upload/News/3f72aac0e2820251219151903886.png", benefits: ["Selling/Imperial Delivery price increased by approx. 7.5x", "Growth speed is 2.5x slower"] },
           { name: "Rare 7 (10x + Breeding)", rare: true, image: "https://s1.pearlcdn.com/KR/Upload/News/92af4ad9cc820251219151848251.png", benefits: ["Selling/Imperial Delivery price increased by approx. 10x", "Breeding Count: 3", "Growth speed is 2.5x slower"] },
@@ -450,7 +474,7 @@
       tier8: {
         label: "Tier 8",
         horses: [
-          { name: "8D", image: "https://bdocodex.com/items/new_ui_common_forlua/window/stable/horse_76.webp" },
+          /* ── Rare ───────────────────────────────── */
           { name: "Rare 8 (10x Value)", rare: true, image: "https://s1.pearlcdn.com/KR/Upload/News/bc3a160f9f920251219151959043.png", benefits: ["Selling/Imperial Delivery price increased by approx. 10x", "Growth speed is 2.5x slower"] },
           { name: "Rare 8 (7.5x Value)", rare: true, image: "https://s1.pearlcdn.com/KR/Upload/News/9c4172be83920251219152004596.png", benefits: ["Selling/Imperial Delivery price increased by approx. 7.5x", "Growth speed is 2.5x slower"] },
           { name: "Rare 8 (10x + Breeding)", rare: true, image: "https://s1.pearlcdn.com/KR/Upload/News/c3c7f92a88f20251219151948707.png", benefits: ["Selling/Imperial Delivery price increased by approx. 10x", "Breeding Count: 3", "Growth speed is 2.5x slower"] },
@@ -534,6 +558,12 @@
               const badge = document.createElement("span");
               badge.className = "rare-badge";
               badge.textContent = "Rare";
+              nameRow.appendChild(badge);
+            }
+            if (h.location) {
+              const badge = document.createElement("span");
+              badge.className = "location-badge";
+              badge.textContent = h.location;
               nameRow.appendChild(badge);
             }
             card.appendChild(nameRow);
